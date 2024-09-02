@@ -47,6 +47,56 @@ Gone are the days of constantly needing to open a text editor, paste in your web
 3. Edit and save your citations as needed.
 4. Click "Copy All" to copy all citations to your clipboard.
 
+## Flaskapp Documentation (API Endpoints):
+
+#### `POST /generate_citations`
+**Description:**  
+Generates Harvard references for a list of URLs.
+
+**Request Parameters:**
+- `urls`: A JSON array of strings, each being a URL to be processed.
+
+**Example Request:**
+```json
+{
+    "urls": [
+        "https://example.com/article1",
+        "https://example.com/article2"
+    ]
+}
+```
+
+**Response:**  
+Returns a JSON object with the Harvard references formatted according to the following pattern:
+```
+[Author] ([Year]) [Title of the page]. Available at: [Link] [Current Date].
+```
+
+**Example Response:**
+```json
+{
+    "citations": [
+        "Doe, J. (2020) Example Title. Available at: https://example.com/article1 [02 September 2024]",
+        "Smith, A. (2022) Another Example. Available at: https://example.com/article2 [02 September 2024]"
+    ]
+}
+```
+
+### Example Request:
+```py
+import requests
+
+url = "http://127.0.0.1:5000/generate_citations"
+data = {
+    "urls": [
+        "https://www.example.com/article"
+    ]
+}
+
+response = requests.post(url, json=data)
+print(response.json())
+```
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork this repository and submit a pull request for any improvements or bug fixes.
