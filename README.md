@@ -47,7 +47,7 @@ Gone are the days of constantly needing to open a text editor, paste in your web
 3. Edit and save your citations as needed.
 4. Click "Copy All" to copy all citations to your clipboard.
 
-## Flaskapp Documentation (API Endpoints):
+## [Flaskapp Documentation](https://github.com/Dynamic155/AutoCiteV2/blob/main/flaskapp.py) (API Endpoints):
 
 #### `POST /generate_citations`
 **Description:**  
