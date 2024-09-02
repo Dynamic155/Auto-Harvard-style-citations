@@ -31,7 +31,11 @@ function generateCitations(urls) {
             citationsList.appendChild(listItem);
         });
     })
-    .catch(error => console.error("Error:", error));
+    .catch(error => {
+        const citationsList = document.getElementById("citations");
+        citationsList.innerHTML = `<li>Error generating citations: ${error.message}</li>`;
+        console.error("Error:", error);
+    });    
 }
 
 document.getElementById("copyAll").addEventListener("click", function () {
