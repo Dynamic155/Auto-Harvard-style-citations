@@ -9,7 +9,7 @@ import time
 import random
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
 class AuthorFinder:
     def __init__(self, soup, deserialized_json):
@@ -95,7 +95,7 @@ def get_publication_date(soup):
                 pass
     return "No date available"
 
-def generate_harvard_reference(url):
+def generate_reference(url):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         "Accept-Language": "en-US,en;q=0.9",
@@ -103,32 +103,34 @@ def generate_harvard_reference(url):
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
         "Connection": "keep-alive"
     }
-    
-    # Adding a random delay
+
     time.sleep(random.uniform(1, 5))
-    
+
     try:
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=True)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
-        
+
         json_ld = soup.find('script', type='application/ld+json')
         deserialized_json = json.loads(json_ld.string) if json_ld else None
         
         author_finder = AuthorFinder(soup, deserialized_json)
-        author = author_finder.find() or ""  # Leave blank if no author
+        author = author_finder.find() or ""
         
         publication_date = get_publication_date(soup)
-        publication_year = f"({publication_date})" if publication_date else ""  # Leave blank if no date
-
-        # Get the page title from the <title> tag under <head>
-        page_title = soup.title.string if soup.title else ""  # Leave blank if no title
+        page_title = soup.title.string if soup.title else ""
         
         current_date = datetime.now().strftime('%d %B %Y')
-        
-        return f"{author} {publication_year} {page_title}. Available at: {url} [{current_date}]"
+
+        return {
+            "author": author,
+            "date": publication_date,
+            "title": page_title,
+            "link": url,
+            "current_date": current_date
+        }
     except Exception as e:
-        return f"Error generating reference: {e}"
+        return {"error": f"Error generating reference: {e}"}
 
 def validate_url(url):
     pattern = re.compile(r'^(http|https)://')
@@ -138,7 +140,9 @@ def validate_url(url):
 def generate_citations():
     data = request.json
     urls = [url for url in data.get('urls', []) if validate_url(url)]
-    citations = [generate_harvard_reference(url) if validate_url(url) else "Invalid URL" for url in urls]
+    
+    citations = [generate_reference(url) for url in urls]
+    
     return jsonify({"citations": citations})
 
 if __name__ == '__main__':

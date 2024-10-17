@@ -3,22 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harvard Citation Generator</title>
+    <title>Auto Citation Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Harvard Citation Generator</h1>
-        <form id="citationForm">
-            <textarea id="urls" placeholder="Enter URLs, one per line"></textarea>
-            <button type="submit">Generate Citations</button>
-        </form>
-        <div id="results">
-            <h2>Generated Citations</h2>
-            <ul id="citations"></ul>
-        </div>
-        <button id="copyAll">Copy All</button>
+        <header>
+            <h1>Auto Citation Tool</h1>
+            <button id="modeToggle">Switch to Dark Mode</button>
+        </header>
+        
+        <main>
+            <button id="addCitationBtn">Add Citation</button>
+            <button id="copyAllBtn">Copy All Citations</button>
+            <button id="deleteAllBtn">Delete All Citations</button>
+            <div id="citationsList"></div>
+        </main>        
     </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Add Website</h2>
+            <textarea id="urlInput" placeholder="Enter URLs separated by commas or lines"></textarea>
+            <button id="submitUrls">Submit</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

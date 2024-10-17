@@ -10,6 +10,8 @@ Gone are the days of constantly needing to open a text editor, paste in your web
 - **Automatic Citations**: Generate Harvard-style citations with ease.
 - **Copy All**: Quickly copy all generated citations to your clipboard.
 - **Edit and Save**: Easily edit and save your citations directly from the interface.
+- **Local Storage**: Save and load citations from local storage for persistent access.
+- **UX FEATURES**: We have added additional things like delete all citations & dark / lightmode switch. 
 
 ## 🚀 Getting Started
 
@@ -46,15 +48,17 @@ Gone are the days of constantly needing to open a text editor, paste in your web
 2. Click "Generate Citations".
 3. Edit and save your citations as needed.
 4. Click "Copy All" to copy all citations to your clipboard.
+5. Use "Delete All" to clear the citations list if necessary.
+6. Switch between light and dark mode using the toggle.
 
 ## [Flaskapp Documentation](https://github.com/Dynamic155/AutoCiteV2/blob/main/flaskapp.py) (API Endpoints):
 
 #### `POST /generate_citations`
 **Description:**  
-Generates Harvard references for a list of URLs.
+Generates references for a list of URLs.
 
 **Request Parameters:**
-- `urls`: A JSON array of strings, each being a URL to be processed.
+- `urls`: A JSON array of strings, where each string is a URL to be processed.
 
 **Example Request:**
 ```json
@@ -67,22 +71,45 @@ Generates Harvard references for a list of URLs.
 ```
 
 **Response:**  
-Returns a JSON object with the Harvard references formatted according to the following pattern:
-```
-[Author] ([Year]) [Title of the page]. Available at: [Link] [Current Date].
+Returns a JSON object containing an array of citations, each formatted as follows:
+```json
+{
+    "citations": [
+        {
+            "author": "[Author]",
+            "date": "[Year]",
+            "title": "[Title of the page]",
+            "link": "[Link]",
+            "current_date": "[Current Date]"
+        },
+        ...
+    ]
+}
 ```
 
 **Example Response:**
 ```json
 {
     "citations": [
-        "Doe, J. (2020) Example Title. Available at: https://example.com/article1 [02 September 2024]",
-        "Smith, A. (2022) Another Example. Available at: https://example.com/article2 [02 September 2024]"
+        {
+            "author": "Doe, J.",
+            "date": "2020",
+            "title": "Example Title",
+            "link": "https://example.com/article1",
+            "current_date": "02 September 2024"
+        },
+        {
+            "author": "Smith, A.",
+            "date": "2022",
+            "title": "Another Example",
+            "link": "https://example.com/article2",
+            "current_date": "02 September 2024"
+        }
     ]
 }
 ```
 
-### Example Request:
+### Example Request in Python:
 ```py
 import requests
 
